@@ -10,7 +10,7 @@
             --book-color: #ffb7c5; 
             --accent-color: #ff8fab;
             --text-color: #5d4037; 
-            --page-bg: #ffffff;
+            --card-bg: #ffffff;
         }
 
         * { 
@@ -26,218 +26,208 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            padding: 10px;
+            padding: 20px;
             font-family: 'Georgia', serif;
             color: var(--text-color);
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         .instruction { 
-            margin-bottom: 10px; 
+            margin-bottom: 20px; 
             font-style: italic; 
             opacity: 0.7; 
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             text-align: center;
         }
 
-        /* Contenedor del Libro Responsivo */
-        .book-container {
+        /* Contenedor de las hojas */
+        .cards-container {
+            width: 100%;
+            max-width: 320px;
+            height: 450px;
+            position: relative;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: 100%;
-            height: 420px;
-        }
-
-        .book { 
-            width: 160px; /* Ancho de media página */
-            height: 400px; 
-            position: relative; 
-            perspective: 1500px;
-            transition: transform 1s;
-        }
-
-        .page {
-            width: 100%; 
-            height: 100%; 
-            position: absolute; 
-            top: 0; 
-            left: 0;
-            transform-origin: left; 
-            transform-style: preserve-3d;
-            transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border: 1px solid #eee1e5;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s;
             z-index: 1;
         }
 
-        .front, .back {
-            position: absolute; 
-            width: 100%; 
-            height: 100%; 
-            backface-visibility: hidden;
-            padding: 20px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center;
-            align-items: center; 
-            text-align: center; 
-            border: 1px solid #eee1e5;
-            box-shadow: inset 3px 0px 15px rgba(0,0,0,0.02); 
-            background: var(--page-bg);
-            border-radius: 0 5px 5px 0;
-        }
-
-        .back { 
-            transform: rotateY(180deg); 
-            background: #fffafa; 
-            border-radius: 5px 0 0 5px; 
-        }
-
-        .cover-front { 
-            background-color: var(--book-color) !important; 
-            color: white; 
+        /* Estilo de la Portada */
+        .card.cover {
+            background-color: var(--book-color);
+            color: white;
             border: none;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
         }
 
-        .page.flipped { transform: rotateY(-180deg); }
+        /* Clase para ocultar la carta (deslizar a la izquierda) */
+        .card.hidden {
+            transform: translateX(-150%) rotate(-10deg);
+            opacity: 0;
+            pointer-events: none;
+        }
 
-        h2 { color: var(--accent-color); font-size: 1.1rem; margin-bottom: 8px; font-family: sans-serif; }
-        p { line-height: 1.5; font-size: 0.9rem; margin: 5px 0; }
+        h2 { color: var(--accent-color); font-size: 1.5rem; margin-bottom: 15px; }
+        .cover h2 { color: white; font-size: 1.8rem; }
         
+        p { line-height: 1.6; font-size: 1.1rem; margin: 10px 0; }
+        
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.8rem;
+            opacity: 0.5;
+        }
+
         .infinite-list {
-            font-size: 0.7rem;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 4px;
-            margin-top: 10px;
+            gap: 6px;
+            margin-top: 15px;
         }
         .item-tag {
             background: #fce4ec;
-            padding: 2px 6px;
-            border-radius: 8px;
+            padding: 4px 10px;
+            border-radius: 12px;
             color: var(--accent-color);
+            font-size: 0.8rem;
         }
 
+        /* Botones */
         .controls { 
-            margin-top: 25px; 
+            margin-top: 30px; 
             display: flex; 
-            gap: 15px; 
-            z-index: 100;
+            gap: 20px; 
         }
 
         button {
-            padding: 10px 18px; 
+            padding: 12px 25px; 
             border: none; 
             background: linear-gradient(135deg, var(--book-color), var(--accent-color));
             color: white; 
-            border-radius: 20px; 
+            border-radius: 25px; 
             cursor: pointer; 
             font-weight: bold;
-            font-size: 0.85rem;
-            box-shadow: 0 3px 8px rgba(255, 143, 171, 0.3);
+            box-shadow: 0 4px 10px rgba(255, 143, 171, 0.3);
         }
 
-        button:disabled { background: #e0e0e0; box-shadow: none; cursor: not-allowed; }
+        button:disabled { background: #ccc; box-shadow: none; }
 
-        .heart { color: #ff5e7e; font-size: 1.2rem; margin: 5px 0; }
+        .heart { color: #ff5e7e; font-size: 1.5rem; margin-bottom: 10px; }
+        .cover .heart { color: white; }
     </style>
 </head>
 <body>
 
-    <p class="instruction">Toca las páginas para descubrir...</p>
+    <p class="instruction">Desliza las hojas para leer...</p>
 
-    <div class="book-container">
-        <div class="book" id="book">
-            
-            <div class="page" id="p1" style="z-index: 7;">
-                <div class="front cover-front">
-                    <h1 style="font-size: 1.4rem;">10 Cosas que me gustan de ti</h1>
-                    <div class="heart" style="color: white;">❤</div>
-                    <p style="font-size: 0.8rem;">Para Jennifer</p>
-                    <small>5 Meses Juntos</small>
-                </div>
-                <div class="back">
-                    <h2>1. Tus Ojos</h2>
-                    <p>Son mi ventana favorita al mundo; tienen un brillo que me hace sentir cerca de ti sin importar los kilómetros. ✨</p>
-                </div>
-            </div>
-
-            <div class="page" id="p2" style="z-index: 6;">
-                <div class="front">
-                    <h2>2. Tu Sinceridad</h2>
-                    <p>Amo que contigo no hay filtros. Poder hablar de todo con la verdad me da una paz increíble. 🌸</p>
-                </div>
-                <div class="back">
-                    <h2>3. Mujer con Metas</h2>
-                    <p>Me encanta ver cómo te esfuerzas. Tu ambición me inspira a ser mejor cada día a tu lado. 🚀</p>
-                </div>
-            </div>
-
-            <div class="page" id="p3" style="z-index: 5;">
-                <div class="front">
-                    <h2>4. Tu Inteligencia</h2>
-                    <p>Me encanta escucharte hablar. Tienes una forma de analizar las cosas que siempre me deja aprendiendo algo nuevo. 🧠💕</p>
-                </div>
-                <div class="back">
-                    <h2>5. Tu Apoyo</h2>
-                    <p>Saber que crees en mis proyectos, desde Unity hasta Fiverr, es mi mayor motivación. 💻💖</p>
-                </div>
-            </div>
-
-            <div class="page" id="p4" style="z-index: 4;">
-                <div class="front">
-                    <h2>6. Tu Ternura</h2>
-                    <p>Esa dulzura tuya es mi refugio favorito cuando el día se pone difícil. 🎀</p>
-                </div>
-                <div class="back">
-                    <h2>7. Tu Sonrisa</h2>
-                    <p>Es el motor que ilumina todo. Verla es lo mejor que me puede pasar en el día. 😊</p>
-                </div>
-            </div>
-
-            <div class="page" id="p5" style="z-index: 3;">
-                <div class="front">
-                    <h2>8. Nuestra Complicidad</h2>
-                    <p>Amo nuestras bromas y ese lenguaje que solo nosotros entendemos. 🔒❤️</p>
-                </div>
-                <div class="back">
-                    <h2>9. Tu Cuidado</h2>
-                    <p>Valoro muchísimo cómo estás pendiente de mí. Me hace sentir muy querido. 🥰</p>
-                </div>
-            </div>
-
-            <div class="page" id="p6" style="z-index: 2;">
-                <div class="front">
-                    <h2>10. Simplemente TÚ</h2>
-                    <p>Me gusta todo de ti, Jennifer. No cambiaría absolutamente nada de tu esencia. 🌹</p>
-                </div>
-                <div class="back">
-                    <h2 style="font-size: 1rem; color: #ff5e7e;">¿Qué? ¿Creías que eran 10?</h2>
-                    <p style="font-size: 0.8rem;">¡Pues no! Me gustan miles de cosas más...</p>
-                    <div class="infinite-list">
-                        <span class="item-tag">Tus audios</span>
-                        <span class="item-tag">Tu carita</span>
-                        <span class="item-tag">Tu perfume</span>
-                        <span class="item-tag">Tus chistes</span>
-                        <span class="item-tag">Tu calma</span>
-                        <span class="item-tag">Tus pecas</span>
-                        <span class="item-tag">Tu voz</span>
-                        <span class="item-tag">¡Y tú entera!</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="page" id="p7" style="z-index: 1;">
-                <div class="front" style="background-color: var(--book-color); color: white; border: none;">
-                    <h2>Felices 5 Meses</h2>
-                    <div class="heart" style="color: white;">❤</div>
-                    <p style="font-size: 0.85rem;">Gracias por dejarme quererte y ser parte de mi vida. Eres mi prioridad.</p>
-                </div>
-                <div class="back"></div>
-            </div>
-
+    <div class="cards-container" id="cardsContainer">
+        
+        <div class="card" style="z-index: 1;">
+            <div class="heart">❤</div>
+            <h2>Felices 5 Meses</h2>
+            <p>Gracias por dejarme quererte y ser parte de mi vida. Eres mi prioridad hoy y siempre.</p>
+            <p style="font-size: 0.9rem; opacity: 0.7;">Atte: Jose</p>
         </div>
+
+        <div class="card" style="z-index: 2;">
+            <h2 style="font-size: 1.2rem;">¿Qué? ¿Creías que eran 10?</h2>
+            <p>¡Pues no! Me gustan miles de cosas más de ti...</p>
+            <div class="infinite-list">
+                <span class="item-tag">Tus audios</span>
+                <span class="item-tag">Tu carita</span>
+                <span class="item-tag">Tu perfume</span>
+                <span class="item-tag">Tus chistes</span>
+                <span class="item-tag">Tus pecas</span>
+                <span class="item-tag">Tu voz</span>
+                <span class="item-tag">¡Y tú entera!</span>
+            </div>
+            <div class="page-number">Pág. 11</div>
+        </div>
+
+        <div class="card" style="z-index: 3;">
+            <h2>10. Simplemente TÚ</h2>
+            <p>Me gusta todo de ti, Jennifer. No cambiaría absolutamente nada de tu esencia. 🌹</p>
+            <div class="page-number">Pág. 10</div>
+        </div>
+
+        <div class="card" style="z-index: 4;">
+            <h2>9. Tu Cuidado</h2>
+            <p>Valoro muchísimo cómo estás pendiente de mí. Me hace sentir muy querido y especial. 🥰</p>
+            <div class="page-number">Pág. 9</div>
+        </div>
+
+        <div class="card" style="z-index: 5;">
+            <h2>8. Nuestra Complicidad</h2>
+            <p>Amo nuestras bromas y ese lenguaje que solo nosotros entendemos. 🔒❤️</p>
+            <div class="page-number">Pág. 8</div>
+        </div>
+
+        <div class="card" style="z-index: 6;">
+            <h2>7. Tu Sonrisa</h2>
+            <p>Es el motor que ilumina todo. Verla es lo mejor que me puede pasar en el día. 😊</p>
+            <div class="page-number">Pág. 7</div>
+        </div>
+
+        <div class="card" style="z-index: 7;">
+            <h2>6. Tu Ternura</h2>
+            <p>Esa dulzura tuya es mi refugio favorito cuando el día se pone difícil. 🎀</p>
+            <div class="page-number">Pág. 6</div>
+        </div>
+
+        <div class="card" style="z-index: 8;">
+            <h2>5. Tu Apoyo</h2>
+            <p>Saber que crees en mis proyectos es mi mayor motivación para seguir mejorando. 💻💖</p>
+            <div class="page-number">Pág. 5</div>
+        </div>
+
+        <div class="card" style="z-index: 9;">
+            <h2>4. Tu Inteligencia</h2>
+            <p>Me encanta escucharte hablar. Tienes una forma de analizar las cosas única. 🧠💕</p>
+            <div class="page-number">Pág. 4</div>
+        </div>
+
+        <div class="card" style="z-index: 10;">
+            <h2>3. Mujer con Metas</h2>
+            <p>Me encanta ver cómo te esfuerzas. Tu ambición me inspira a ser mejor. 🚀</p>
+            <div class="page-number">Pág. 3</div>
+        </div>
+
+        <div class="card" style="z-index: 11;">
+            <h2>2. Tu Sinceridad</h2>
+            <p>Amo que contigo no hay filtros. Poder hablar con la verdad me da una paz increíble. 🌸</p>
+            <div class="page-number">Pág. 2</div>
+        </div>
+
+        <div class="card" style="z-index: 12;">
+            <h2>1. Tus Ojos</h2>
+            <p>Son mi ventana favorita al mundo; tienen un brillo que me hace sentir cerca de ti. ✨</p>
+            <div class="page-number">Pág. 1</div>
+        </div>
+
+        <div class="card cover" style="z-index: 13;">
+            <div class="heart">❤</div>
+            <h2>10 Cosas que me gustan de ti</h2>
+            <p>Para Jennifer</p>
+            <small>5 Meses Juntos</small>
+        </div>
+
     </div>
 
     <div class="controls">
@@ -246,100 +236,45 @@
     </div>
 
     <script>
-        const prevBtn = document.querySelector("#prevBtn");
-        const nextBtn = document.querySelector("#nextBtn");
-        const book = document.querySelector("#book");
-        const pages = document.querySelectorAll(".page");
-
-        let currentState = 1;
-        let numOfPapers = 7;
-        let maxState = numOfPapers + 1;
-
-        function openBook() { 
-            // En móvil se desplaza a la derecha para ver la página abierta
-            book.style.transform = "translateX(50%)"; 
-            prevBtn.disabled = false; 
-        }
+        const cards = document.querySelectorAll('.card');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
         
-        function closeBook(isAtBeginning) {
-            book.style.transform = isAtBeginning ? "translateX(0%)" : "translateX(100%)";
-            prevBtn.disabled = isAtBeginning;
-            nextBtn.disabled = !isAtBeginning;
-        }
+        // Las cartas están en orden inverso en el HTML para el Z-index,
+        // así que las convertimos en un array real y lo invertimos para manejar el índice
+        let currentCardIndex = cards.length - 1;
 
-        function goNextPage() {
-            if(currentState < maxState) {
-                const page = document.querySelector(`#p${currentState}`);
-                page.classList.add("flipped");
-                page.style.zIndex = currentState;
-                if(currentState === 1) openBook();
-                if(currentState === numOfPapers) closeBook(false);
-                currentState++;
+        function showNext() {
+            if (currentCardIndex > 0) {
+                cards[currentCardIndex].classList.add('hidden');
+                currentCardIndex--;
+                prevBtn.disabled = false;
+                if (currentCardIndex === 0) {
+                    nextBtn.disabled = true;
+                }
             }
         }
 
-        function goPrevPage() {
-            if(currentState > 1) {
-                currentState--;
-                const page = document.querySelector(`#p${currentState}`);
-                page.classList.remove("flipped");
-                page.style.zIndex = (numOfPapers + 1) - currentState;
-                if(currentState === 1) closeBook(true);
-                if(currentState === numOfPapers) { openBook(); nextBtn.disabled = false; }
+        function showPrev() {
+            if (currentCardIndex < cards.length - 1) {
+                currentCardIndex++;
+                cards[currentCardIndex].classList.remove('hidden');
+                nextBtn.disabled = false;
+                if (currentCardIndex === cards.length - 1) {
+                    prevBtn.disabled = true;
+                }
             }
         }
 
-        nextBtn.addEventListener("click", goNextPage);
-        prevBtn.addEventListener("click", goPrevPage);
-        pages.forEach(p => p.addEventListener("click", (e) => { 
-            if(e.target.tagName !== 'BUTTON') goNextPage(); 
-        }));
-    </script>
-</body>
-</html>
+        nextBtn.addEventListener('click', showNext);
+        prevBtn.addEventListener('click', showPrev);
 
-    <script>
-        const prevBtn = document.querySelector("#prevBtn");
-        const nextBtn = document.querySelector("#nextBtn");
-        const book = document.querySelector("#book");
-        const pages = document.querySelectorAll(".page");
-
-        let currentState = 1;
-        let numOfPapers = 7;
-        let maxState = numOfPapers + 1;
-
-        function openBook() { book.style.transform = "translateX(50%)"; prevBtn.disabled = false; }
-        function closeBook(isAtBeginning) {
-            book.style.transform = isAtBeginning ? "translateX(0%)" : "translateX(100%)";
-            prevBtn.disabled = isAtBeginning;
-            nextBtn.disabled = !isAtBeginning;
-        }
-
-        function goNextPage() {
-            if(currentState < maxState) {
-                const page = document.querySelector(`#p${currentState}`);
-                page.classList.add("flipped");
-                page.style.zIndex = currentState;
-                if(currentState === 1) openBook();
-                if(currentState === numOfPapers) closeBook(false);
-                currentState++;
-            }
-        }
-
-        function goPrevPage() {
-            if(currentState > 1) {
-                currentState--;
-                const page = document.querySelector(`#p${currentState}`);
-                page.classList.remove("flipped");
-                page.style.zIndex = (numOfPapers + 1) - currentState;
-                if(currentState === 1) closeBook(true);
-                if(currentState === numOfPapers) { openBook(); nextBtn.disabled = false; }
-            }
-        }
-
-        nextBtn.addEventListener("click", goNextPage);
-        prevBtn.addEventListener("click", goPrevPage);
-        pages.forEach(p => p.addEventListener("click", (e) => { if(e.target.tagName !== 'BUTTON') goNextPage(); }));
+        // También se puede tocar la carta para avanzar
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                if (!nextBtn.disabled) showNext();
+            });
+        });
     </script>
 </body>
 </html>
